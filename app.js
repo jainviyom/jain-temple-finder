@@ -1,6 +1,10 @@
 const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
 const NOMINATIM_URL = "https://nominatim.openstreetmap.org/search";
 
+// TODO: replace with your real UPI ID (e.g. "yourname@okhdfcbank") before sharing —
+// this placeholder will not accept payments.
+const DONATION_UPI_ID = "your-upi-id@upi";
+
 // Note: Overpass's case-insensitive regex flag ("~...",i) is dramatically slower
 // than a case-sensitive alternation over both capitalizations, and times out at
 // larger radii. So name matches are spelled out in both cases instead of using ",i".
@@ -56,6 +60,13 @@ const categorySelect = document.getElementById("category-select");
 const statusEl = document.getElementById("status");
 const resultsList = document.getElementById("results-list");
 const resultCount = document.getElementById("result-count");
+const donateLink = document.getElementById("donate-link");
+const upiIdDisplay = document.getElementById("upi-id-display");
+
+donateLink.href = `upi://pay?pa=${encodeURIComponent(DONATION_UPI_ID)}&pn=${encodeURIComponent(
+  "Jain Temple Finder"
+)}&cu=INR`;
+upiIdDisplay.textContent = DONATION_UPI_ID;
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
