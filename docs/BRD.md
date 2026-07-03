@@ -85,6 +85,14 @@ Jain friends and community network. It runs entirely on free infrastructure
 | FR-7 | If a category's search fails/times out, other categories still return results (graceful degradation) | Done |
 | FR-8 | User can voluntarily donate via a UPI link/QR to support hosting costs | Done (UPI ID is a placeholder pending the maintainer's real ID) |
 | FR-9 | User can submit a new place via a "+ New" button; it becomes visible to all users in real time | Planned — requires a Firebase project the maintainer provisions |
+| FR-10 | User can get turn-by-turn directions to a result | Done |
+| FR-11 | User can report a data correction, deep-linked into OpenStreetMap's own editor | Done |
+| FR-12 | User can share a link to one specific place that reopens the app centered on it | Done |
+| FR-13 | User can save places to a personal list (no account) and revisit them later | Done |
+| FR-14 | User can look up nearby vegetarian-only restaurants or Dharamshalas from a result | Done |
+| FR-15 | User can install the app to their home screen and reopen the app shell without a network round-trip | Done |
+| FR-16 | User can search along a route between two or more places, not just around one point | Not yet designed — needs a routing/geometry approach decided first |
+| FR-17 | A temple trust can mark their own listing as "verified" | Not yet designed — needs a real verification mechanism decided first (who grants it, how fake claims are prevented) |
 
 ## 8. Non-Functional Requirements
 
@@ -127,9 +135,15 @@ Jain friends and community network. It runs entirely on free infrastructure
 
 1. ~~Core search + category filters~~ — done.
 2. ~~Donation button~~ — done (pending real UPI ID).
-3. Community submissions via Firebase Firestore, with "+ New" button on the map screen — in progress.
-4. (Future, unscoped) Possible moderation/review queue if submission quality becomes an issue.
-5. (Future, unscoped) Route corrections back into OpenStreetMap so the wider map ecosystem benefits, not just this app.
+3. ~~Directions, report-a-correction, share-a-place links, saved places, nearby veg
+   food/Dharamshala lookup, PWA install~~ — done.
+4. Community submissions via Firebase Firestore, with "+ New" button on the map screen — in progress.
+5. (Future, unscoped) Multi-stop/route search — needs a routing/geometry approach decided first.
+6. (Future, unscoped) "Verified by trust" badges — needs a real verification mechanism decided
+   first (who grants it, how fake claims are prevented); could tie into the monetization model
+   as a legitimate paid-verification option instead of ads.
+7. (Future, unscoped) Possible moderation/review queue if submission quality becomes an issue.
+8. (Future, unscoped) Route corrections back into OpenStreetMap so the wider map ecosystem benefits, not just this app.
 
 ## 13. Glossary
 

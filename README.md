@@ -16,8 +16,21 @@ For the full picture beyond this quick-start:
 - Adjustable search radius (5–100 km).
 - Map + distance-sorted list, with per-category icons.
 - Graceful degradation: if one category's search times out, the others still return results.
+- **Directions** — one tap opens Google Maps directions to any result.
+- **Report a correction** — deep-links a result straight into OpenStreetMap's editor.
+- **Share a place** — copies (or native-shares) a link that reopens the app centered on that
+  exact place, via `?lat=&lon=&name=&cat=` URL parameters — no server round-trip needed.
+- **Saved places** — a "⭐ Saved" tab lets you star results to a personal list stored in
+  `localStorage`, no account required.
+- **Nearby veg food / Dharamshala** — from any result's map popup, look up nearby
+  vegetarian-only restaurants or Dharamshalas (guest houses) via their own small Overpass query.
+- **Installable (PWA)** — add it to your phone's home screen; the app shell is cached for
+  quick loads (search results still need a live connection).
 - Voluntary UPI donation link in the footer to help offset hosting/domain costs.
 - *(Planned)* Community "+ New" submissions via a live database — see [docs/BRD.md](docs/BRD.md#12-roadmap).
+- *(Not yet designed)* Multi-stop/route search and "verified by trust" badges — flagged as
+  needing their own design pass (a routing algorithm, and a real verification mechanism,
+  respectively) before being built.
 
 ## How it works
 - Enter a place name (or tap "Use my location") to set a search center.

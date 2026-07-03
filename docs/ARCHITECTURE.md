@@ -6,8 +6,8 @@ Last updated: 2026-07-03
 
 Jain Temple Finder is a **static, client-only web app** — there is no application
 server. All logic runs in the visitor's browser, which talks directly to a small
-set of third-party public APIs. This keeps hosting cost at zero and the codebase
-small (3 files today, plus a planned Firebase addition).
+set of third-party public APIs, plus the browser's own storage APIs for
+favorites and offline caching. This keeps hosting cost at zero.
 
 ## 2. Tech stack
 
@@ -20,6 +20,10 @@ small (3 files today, plus a planned Firebase addition).
 | Map tiles | OpenStreetMap tile servers | Free, no key required |
 | Geocoding (place name → coordinates) | [Nominatim](https://nominatim.org/) (OpenStreetMap) | Free, no key, matches the OSM-first data philosophy |
 | Place data (temples, Dadabaris, etc.) | [Overpass API](https://overpass-api.de/) querying OpenStreetMap | Free, queryable by tag, no key |
+| Nearby veg food / Dharamshala lookup | Overpass API, small fixed-radius query per place | Reuses the same query pattern, scoped to one place instead of the whole search radius |
+| Saved places | Browser `localStorage` | No account/backend needed for a personal favorites list |
+| Shareable place links | URL query parameters (`?lat=&lon=&name=&cat=`) | The link itself carries enough data to render the place instantly — no lookup round-trip |
+| Installability | Web App Manifest (`manifest.json`) + Service Worker (`sw.js`) | Standard PWA install/offline-shell mechanism, no extra runtime dependency |
 | Community submissions *(planned)* | [Firebase Firestore](https://firebase.google.com/) | Generous free tier, no server to run, browser SDK works without a bundler via CDN/ES modules |
 | Hosting | [GitHub Pages](https://pages.github.com/) | Free static hosting, deploys straight from the `main` branch |
 | CI/CD | GitHub's built-in **Pages build and deployment** workflow | Runs automatically on every push to `main`, no custom pipeline authored |
@@ -61,21 +65,40 @@ a direct browser-to-third-party-API call.
 ## 4. Component breakdown
 
 - **`index.html`** — page structure: search form, radius/category selects,
-  category legend, map container, results list, donation footer.
+  category legend, map container, Results/Saved tabs, results list, donation footer,
+  PWA meta tags (manifest link, theme color, icons).
 - **`style.css`** — all visual styling; CSS custom properties (`--accent`, `--bg`,
   etc.) centralize the color palette.
+- **`manifest.json`** — PWA install metadata (name, icons, theme color, start URL).
+- **`sw.js`** — service worker: cache-first for the app shell's own files, always
+  network for any other origin (map tiles, Nominatim, Overpass, Leaflet's CDN),
+  so search results are never served stale.
+- **`icon.svg` / `icon-*.png`** — app icon (SVG for manifest/favicon, PNGs for
+  iOS home-screen and Android, generated from matching geometry).
 - **`app.js`** — all behavior:
   - `CATEGORIES` config: for each category (temple, Dadabari, Upashray, Panjrapole),
     defines its Overpass tag filter(s), which OSM element types to query
     (node/way/relation), a display emoji/label, and a `test()` function used to
     classify raw OSM tags back into a category.
+  - `AMENITY_QUERIES` config: same pattern as `CATEGORIES`, but for the
+    "nearby veg food / Dharamshala" lookup triggered from a single place's popup,
+    at a small fixed radius rather than the user's chosen search radius.
   - `geocodePlace()` — calls Nominatim to turn a typed place name into coordinates.
   - `buildOverpassQuery()` / `runOverpassQuery()` / `queryJainPlaces()` — build and
     run one Overpass query **per category** (not one giant combined query — see
     §5 for why), with a one-time automatic retry on timeout, and per-category
     graceful degradation so one slow category doesn't block the others.
-  - `renderResults()` — draws map markers and the results list from the merged,
-    distance-sorted place list.
+  - `renderResults()` / `renderResultsList()` / `renderSaved()` — draw map markers
+    from a search, and render whichever of the two result-panel tabs is active.
+  - `buildResultLi()` — the shared result-row builder used by both tabs, including
+    the directions/share/report-correction/save action buttons.
+  - `getFavorites()` / `toggleFavorite()` — read/write the `localStorage`-backed
+    saved-places list.
+  - `buildShareUrl()` / `sharePlace()` / `loadSharedPlaceFromUrl()` — encode a
+    place into shareable URL parameters, share or copy that link, and render a
+    place directly from those parameters when the app loads with them present.
+  - `findNearbyAmenity()` — runs an `AMENITY_QUERIES` lookup around one place and
+    plots the results in a separate marker layer.
   - `classify()` / `detectDenomination()` — post-process raw OSM tags into a
     category and an optional Digambar/Shwetambar/Sthanakvasi badge.
 
@@ -98,6 +121,18 @@ a direct browser-to-third-party-API call.
   ships, the `firebaseConfig` object (apiKey, projectId, etc.) will be visible
   in the client bundle by design — Firebase's actual access control is enforced
   server-side via Firestore **security rules**, not by hiding the config.
+- **Share links carry their own data, no lookup needed**: a shared place's name,
+  category, denomination, and coordinates are all encoded directly in the URL's
+  query parameters. Opening a shared link renders instantly without an extra
+  Overpass round-trip, at the cost of a longer URL.
+- **Favorites live in `localStorage`, not a database**: saving a place doesn't
+  require an account or network call. The tradeoff is that saved places don't
+  sync across devices/browsers — acceptable for a personal "places I want to
+  visit" list at this project's scale.
+- **Service worker caches same-origin requests only**: the `fetch` handler in
+  `sw.js` explicitly checks `url.origin !== self.location.origin` and lets
+  everything else (map tiles, Nominatim, Overpass, Leaflet's CDN) pass straight
+  to the network — caching those would risk serving stale search results.
 
 ## 6. Deployment flow
 
