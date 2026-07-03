@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jain Temple Finder</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🛕 Jain Temple Finder</h1>
+    <p class="subtitle">Find Jain derasars &amp; temples near any location, wherever you're traveling.</p>
+  </header>
+
+  <section class="controls">
+    <form id="search-form">
+      <input
+        type="text"
+        id="place-input"
+        placeholder="Search a city or place (e.g. Udaipur, Jaipur)"
+        autocomplete="off"
+      />
+      <button type="submit" id="search-btn">Search</button>
+      <button type="button" id="locate-btn" title="Use my current location">📍 Use my location</button>
+    </form>
+
+    <div class="filters">
+      <label for="radius-select">Radius:</label>
+      <select id="radius-select">
+        <option value="5000">5 km</option>
+        <option value="10000" selected>10 km</option>
+        <option value="25000">25 km</option>
+        <option value="50000">50 km</option>
+        <option value="100000">100 km</option>
+      </select>
+      <span id="status" class="status"></span>
+    </div>
+  </section>
+
+  <main>
+    <div id="map"></div>
+    <aside id="results">
+      <h2>Results <span id="result-count"></span></h2>
+      <ul id="results-list"></ul>
+    </aside>
+  </main>
+
+  <footer>
+    <p>
+      Temple data from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>
+      contributors via the Overpass API. Coverage depends on what's been mapped in each area —
+      if a temple you know of is missing, consider adding it to OSM.
+    </p>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
