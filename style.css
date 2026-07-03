@@ -81,16 +81,22 @@ button:hover {
 .filters {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 0.7rem;
   font-size: 0.9rem;
   color: var(--muted);
 }
 
-#radius-select {
+#radius-select,
+#category-select {
   padding: 0.3rem 0.5rem;
   border-radius: 6px;
   border: 1px solid var(--border);
+}
+
+#category-select {
+  margin-left: 0.5rem;
 }
 
 .status {
@@ -100,6 +106,15 @@ button:hover {
 .status.error {
   color: #b8442f;
   font-weight: 600;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--muted);
 }
 
 main {
