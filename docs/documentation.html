@@ -1,0 +1,740 @@
+<title>Jain Temple Finder — Documentation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --paper: #eef0ec;
+    --paper-raised: #f7f8f5;
+    --ink: #23282f;
+    --muted: #5c6167;
+    --accent: #96682a;
+    --accent-deep: #7c5a24;
+    --line: #d7d2c4;
+    --maroon: #7a3b34;
+    --maroon-bg: #f4e9e6;
+    --status-done: #3f6e58;
+    --status-done-bg: #e3ede7;
+    --status-planned: #4f5f82;
+    --status-planned-bg: #e7eaf2;
+    --status-todo: #8a7248;
+    --status-todo-bg: #efe9dc;
+    --shadow: 0 1px 2px rgba(35, 40, 47, 0.06), 0 8px 24px rgba(35, 40, 47, 0.05);
+
+    --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #1b1d1e;
+      --paper-raised: #232527;
+      --ink: #e9e6dd;
+      --muted: #a6a299;
+      --accent: #d3a35f;
+      --accent-deep: #e8bb7c;
+      --line: #3a3c37;
+      --maroon: #d08b81;
+      --maroon-bg: #362522;
+      --status-done: #7bb69a;
+      --status-done-bg: #22322a;
+      --status-planned: #97a8d6;
+      --status-planned-bg: #232a3c;
+      --status-todo: #c9b183;
+      --status-todo-bg: #332c1e;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 28px rgba(0, 0, 0, 0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1b1d1e;
+    --paper-raised: #232527;
+    --ink: #e9e6dd;
+    --muted: #a6a299;
+    --accent: #d3a35f;
+    --accent-deep: #e8bb7c;
+    --line: #3a3c37;
+    --maroon: #d08b81;
+    --maroon-bg: #362522;
+    --status-done: #7bb69a;
+    --status-done-bg: #22322a;
+    --status-planned: #97a8d6;
+    --status-planned-bg: #232a3c;
+    --status-todo: #c9b183;
+    --status-todo-bg: #332c1e;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 28px rgba(0, 0, 0, 0.35);
+  }
+  :root[data-theme="light"] {
+    --paper: #eef0ec;
+    --paper-raised: #f7f8f5;
+    --ink: #23282f;
+    --muted: #5c6167;
+    --accent: #96682a;
+    --accent-deep: #7c5a24;
+    --line: #d7d2c4;
+    --maroon: #7a3b34;
+    --maroon-bg: #f4e9e6;
+    --status-done: #3f6e58;
+    --status-done-bg: #e3ede7;
+    --status-planned: #4f5f82;
+    --status-planned-bg: #e7eaf2;
+    --status-todo: #8a7248;
+    --status-todo-bg: #efe9dc;
+    --shadow: 0 1px 2px rgba(35, 40, 47, 0.06), 0 8px 24px rgba(35, 40, 47, 0.05);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent); color: var(--paper); }
+
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:hover { color: var(--accent-deep); }
+  a:focus-visible, button:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  code, .mono { font-family: var(--font-mono); font-size: 0.88em; }
+  code {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.05em 0.4em;
+  }
+
+  h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; }
+
+  /* ---------- Masthead ---------- */
+  .masthead {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 3.2rem 2rem 2rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow {
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin: 0 0 0.9rem;
+  }
+  .masthead h1 {
+    font-size: clamp(2.1rem, 4vw, 3rem);
+    margin: 0 0 0.6rem;
+    letter-spacing: -0.01em;
+  }
+  .masthead .dek {
+    max-width: 62ch;
+    font-size: 1.15rem;
+    color: var(--muted);
+    margin: 0 0 1.4rem;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.4rem;
+    font-size: 0.86rem;
+    color: var(--muted);
+  }
+  .meta-row strong { color: var(--ink); font-weight: 600; }
+
+  /* ---------- Layout ---------- */
+  .layout {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 3rem;
+    padding: 2.4rem 2rem 5rem;
+    align-items: start;
+  }
+  nav.toc {
+    position: sticky;
+    top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    font-size: 0.88rem;
+  }
+  nav.toc .toc-group { margin-bottom: 1.1rem; }
+  nav.toc .toc-title {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin: 0 0 0.5rem;
+  }
+  nav.toc a {
+    display: block;
+    padding: 0.28rem 0;
+    color: var(--muted);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    padding-left: 0.7rem;
+    margin-left: -0.7rem;
+  }
+  nav.toc a:hover { color: var(--ink); }
+  nav.toc a.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    font-weight: 600;
+  }
+
+  main { min-width: 0; }
+  section { margin-bottom: 3.6rem; scroll-margin-top: 1.5rem; }
+  section > .eyebrow { margin-top: 0; }
+  section h2 {
+    font-size: 1.7rem;
+    margin: 0 0 1.1rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--line);
+  }
+  section h3 {
+    font-size: 1.18rem;
+    margin: 1.8rem 0 0.7rem;
+  }
+  .prose { max-width: 68ch; }
+  .prose p { margin: 0 0 1rem; }
+  .prose ul, .prose ol { max-width: 68ch; padding-left: 1.3rem; }
+  .prose li { margin-bottom: 0.45rem; }
+
+  /* ---------- Tables ---------- */
+  .table-wrap { overflow-x: auto; margin: 1rem 0 1.6rem; border: 1px solid var(--line); border-radius: 10px; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.92rem; background: var(--paper-raised); }
+  th, td { text-align: left; padding: 0.65rem 0.9rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th {
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.68rem;
+    color: var(--muted);
+    background: transparent;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.id-cell, th.id-cell { font-family: var(--font-mono); color: var(--muted); white-space: nowrap; }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    font-size: 0.74rem;
+    font-weight: 600;
+    padding: 0.18rem 0.6rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .pill.done { background: var(--status-done-bg); color: var(--status-done); }
+  .pill.planned { background: var(--status-planned-bg); color: var(--status-planned); }
+  .pill.todo { background: var(--status-todo-bg); color: var(--status-todo); }
+  .pill::before { content: "●"; font-size: 0.6em; }
+
+  /* ---------- Cards ---------- */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    margin: 1.2rem 0 1.6rem;
+  }
+  .card {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1.1rem 1.2rem;
+  }
+  .card h4 { margin: 0 0 0.4rem; font-size: 1rem; }
+  .card p { margin: 0; color: var(--muted); font-size: 0.9rem; }
+
+  .callout {
+    border-left: 3px solid var(--maroon);
+    background: var(--maroon-bg);
+    border-radius: 0 8px 8px 0;
+    padding: 0.9rem 1.1rem;
+    margin: 1.2rem 0;
+    font-size: 0.92rem;
+  }
+  .callout strong { color: var(--maroon); }
+
+  /* ---------- Feature list ---------- */
+  .feature-list { list-style: none; padding: 0; margin: 1.2rem 0; display: grid; gap: 0.6rem; }
+  .feature-list li {
+    display: flex;
+    gap: 0.7rem;
+    align-items: baseline;
+    padding: 0.6rem 0.85rem;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 0.94rem;
+  }
+  .feature-list .glyph { font-size: 1.05rem; flex-shrink: 0; }
+
+  /* ---------- Architecture diagram ---------- */
+  .diagram {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--paper-raised);
+    padding: 1.6rem;
+    margin: 1.2rem 0 1.6rem;
+    overflow-x: auto;
+  }
+  .diagram-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: nowrap; min-width: 640px; }
+  .diagram-row + .diagram-row { margin-top: 0.9rem; }
+  .dbox {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.82rem;
+    text-align: center;
+    flex: 1;
+    background: var(--paper);
+  }
+  .dbox.browser { background: var(--accent); color: var(--paper); border-color: var(--accent); font-weight: 600; }
+  .dbox .label { display: block; font-weight: 600; margin-bottom: 0.15rem; }
+  .dbox .sub { display: block; color: var(--muted); font-size: 0.78rem; }
+  .dbox.browser .sub { color: rgba(255,255,255,0.85); }
+  .dbox.planned { border-style: dashed; }
+  .arrow-row { display: flex; justify-content: center; min-width: 640px; }
+  .arrow { color: var(--muted); font-size: 1.1rem; }
+  .diagram-caption { text-align: center; font-size: 0.78rem; color: var(--muted); margin-top: 0.6rem; }
+
+  /* ---------- Roadmap ---------- */
+  .roadmap { list-style: none; padding: 0; margin: 1.2rem 0; counter-reset: step; }
+  .roadmap li {
+    counter-increment: step;
+    position: relative;
+    padding: 0 0 1.3rem 2.6rem;
+    border-left: 1px solid var(--line);
+    margin-left: 0.65rem;
+  }
+  .roadmap li:last-child { border-color: transparent; padding-bottom: 0; }
+  .roadmap li::before {
+    content: counter(step);
+    position: absolute;
+    left: -0.72rem;
+    top: -0.1rem;
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body);
+  }
+  .roadmap li.done::before { content: "✓"; background: var(--status-done-bg); border-color: var(--status-done); color: var(--status-done); }
+  .roadmap li.current::before { background: var(--status-planned-bg); border-color: var(--status-planned); color: var(--status-planned); }
+  .roadmap .r-title { font-weight: 600; margin-bottom: 0.15rem; }
+  .roadmap .r-desc { color: var(--muted); font-size: 0.9rem; }
+
+  footer {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 2rem 2rem 3rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.85rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.4rem;
+  }
+
+  .mobile-toc-toggle { display: none; }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; padding-top: 1.2rem; }
+    nav.toc {
+      position: static;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.5rem;
+    }
+    nav.toc .toc-group { display: contents; }
+    nav.toc .toc-title { display: none; }
+    nav.toc a {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.3rem 0.8rem;
+      margin: 0;
+      font-size: 0.8rem;
+    }
+    nav.toc a.active { background: var(--paper-raised); }
+    .masthead { padding: 2.2rem 1.2rem 1.6rem; }
+    .layout { padding-left: 1.2rem; padding-right: 1.2rem; }
+    footer { padding-left: 1.2rem; padding-right: 1.2rem; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+</style>
+
+<div class="masthead">
+  <p class="eyebrow">Documentation · Living document · Last updated 2026-07-03</p>
+  <h1>Jain Temple Finder</h1>
+  <p class="dek">A free, no-login web app that helps traveling Jains find nearby derasars, Dadabaris, Upashrays, and Panjrapoles — built on OpenStreetMap and hosted at zero cost.</p>
+  <div class="meta-row">
+    <span><strong>Live app:</strong> <a href="https://jainviyom.github.io/jain-temple-finder/">jainviyom.github.io/jain-temple-finder</a></span>
+    <span><strong>Source:</strong> <a href="https://github.com/jainviyom/jain-temple-finder">github.com/jainviyom/jain-temple-finder</a></span>
+    <span><strong>Stage:</strong> Early / community MVP</span>
+  </div>
+</div>
+
+<div class="layout">
+  <nav class="toc" id="toc">
+    <div class="toc-group">
+      <p class="toc-title">Overview</p>
+      <a href="#overview">Summary</a>
+      <a href="#features">Features</a>
+    </div>
+    <div class="toc-group">
+      <p class="toc-title">Business requirements</p>
+      <a href="#objectives">Objectives &amp; scope</a>
+      <a href="#stakeholders">Stakeholders &amp; users</a>
+      <a href="#requirements">Requirements</a>
+      <a href="#risks">Risks</a>
+      <a href="#roadmap">Roadmap</a>
+    </div>
+    <div class="toc-group">
+      <p class="toc-title">Architecture</p>
+      <a href="#stack">Tech stack</a>
+      <a href="#diagram">System diagram</a>
+      <a href="#decisions">Key decisions</a>
+      <a href="#deployment">Deployment</a>
+    </div>
+  </nav>
+
+  <main>
+    <section id="overview">
+      <p class="eyebrow">Overview</p>
+      <h2>What this is</h2>
+      <div class="prose">
+        <p>There's no purpose-built, Jain-specific place-finder — generic map apps either don't know about these places or bury them under irrelevant results. This app searches OpenStreetMap's live dataset for Jain community places near any location the user searches or their current position, filterable by category, with no account, install, or cost to the user.</p>
+        <p>It runs entirely on free infrastructure: static hosting plus public map-data APIs. Any monetization (a voluntary donation link) exists only to offset the maintainer's real out-of-pocket costs, not to generate profit.</p>
+      </div>
+    </section>
+
+    <section id="features">
+      <h2>Features</h2>
+      <ul class="feature-list">
+        <li><span class="glyph">🔎</span> Search by typed place name or device geolocation</li>
+        <li><span class="glyph">🛕</span> Filter by category — Temple/Derasar, Dadabari, Upashray/Sthanak, Panjrapole/Goshala, or all combined</li>
+        <li><span class="glyph">🪷</span> Denomination badges (Digambar / Shwetambar / Sthanakvasi) shown where source data has them</li>
+        <li><span class="glyph">📏</span> Adjustable search radius, 5–100 km</li>
+        <li><span class="glyph">🗺️</span> Map and distance-sorted list, with per-category icons</li>
+        <li><span class="glyph">🧩</span> Graceful degradation — if one category's search times out, the others still return results</li>
+        <li><span class="glyph">🧭</span> Directions to any result via Google Maps</li>
+        <li><span class="glyph">✏️</span> Report a correction, deep-linked into OpenStreetMap's own editor</li>
+        <li><span class="glyph">🔗</span> Share a link to one specific place — renders instantly, no extra lookup</li>
+        <li><span class="glyph">⭐</span> Save places to a personal list (no account), in a "Saved" tab</li>
+        <li><span class="glyph">🍽️</span> Look up nearby vegetarian food or Dharamshalas from any result</li>
+        <li><span class="glyph">📲</span> Installable to your home screen, with the app shell cached for quick loads</li>
+        <li><span class="glyph">🙏</span> Voluntary UPI donation link in the footer</li>
+        <li><span class="glyph">➕</span> <em>Planned:</em> community "+ New" submissions via a live database</li>
+        <li><span class="glyph">🚧</span> <em>Not yet designed:</em> multi-stop route search, "verified by trust" badges</li>
+      </ul>
+    </section>
+
+    <section id="objectives">
+      <p class="eyebrow">Business requirements</p>
+      <h2>Objectives &amp; scope</h2>
+      <div class="prose">
+        <h3>Objectives</h3>
+        <ol>
+          <li>Make it fast and easy for a traveling Jain to find relevant places nearby, without an account or app install.</li>
+          <li>Grow the map's coverage over time by letting the community contribute places that aren't yet mapped.</li>
+          <li>Keep operating cost near-zero; any monetization only offsets real costs, never a profit target.</li>
+        </ol>
+
+        <h3>In scope — built</h3>
+        <p>Search by name/geolocation, category filtering, denomination badges, map + list view, voluntary donation link.</p>
+
+        <h3>In scope — planned</h3>
+        <p>Community-submitted places via a "+ New" button, stored in a live database, visible to all users in real time and clearly marked as unverified community data, distinct from OpenStreetMap data.</p>
+
+        <h3>Out of scope</h3>
+        <p>User accounts, native mobile apps, an editorial review queue for submissions, trip planning / itineraries / reviews / bookings, paid tiers or feature paywalls.</p>
+      </div>
+    </section>
+
+    <section id="stakeholders">
+      <h2>Stakeholders &amp; target users</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Stakeholder</th><th>Interest</th></tr></thead>
+          <tbody>
+            <tr><td>Maintainer</td><td>Builds and operates the app; bears any hosting cost</td></tr>
+            <tr><td>End users (Jain travelers)</td><td>Want fast, accurate, relevant results with no friction</td></tr>
+            <tr><td>OpenStreetMap contributors</td><td>Source of the underlying place data; benefit from corrections routed back to OSM</td></tr>
+            <tr><td>Future contributors</td><td>Anyone submitting a missing place via the community feature</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-grid">
+        <div class="card">
+          <h4>The traveling devotee</h4>
+          <p>Visiting an unfamiliar city, wants to know if there's a derasar or upashray within walking or short-drive distance.</p>
+        </div>
+        <div class="card">
+          <h4>The pilgrimage planner</h4>
+          <p>Researching Dadabaris or lesser-known sites ahead of a trip.</p>
+        </div>
+        <div class="card">
+          <h4>The local contributor</h4>
+          <p>Knows of a temple, Panjrapole, or Upashray missing from the map and wants to add it with no technical friction.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="requirements">
+      <h2>Functional requirements</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th class="id-cell">ID</th><th>Requirement</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="id-cell">FR-1</td><td>Search by typing a place name</td><td><span class="pill done">Done</span></td></tr>
+            <tr><td class="id-cell">FR-2</td><td>Search using device's current location</td><td><span class="pill done">Done</span></td></tr>
+            <tr><td class="id-cell">FR-3</td><td>Filter results by category</td><td><span class="pill done">Done</span></td></tr>
+            <tr><td class="id-cell">FR-4</td><td>Adjust search radius (5–100 km)</td><td><span class="pill done">Done</span></td></tr>
+            <tr><td class="id-cell">FR-5</td><td>Results shown on an interactive map with category icons</td><td><span class="pill done">Done</span></td></tr>
+            <tr><td class="id-cell">FR-6</td><td>Results list sorted by distance, with name/category/denomination/address</td><td><span class="pill done">Done</span></td></tr>
+            <tr><td class="id-cell">FR-7</td><td>One category's timeout doesn't block the others</td><td><span class="pill done">Done</span></td></tr>
+            <tr><td class="id-cell">FR-8</td><td>Voluntary UPI donation link</td><td><span class="pill done">Done*</span></td></tr>
+            <tr><td class="id-cell">FR-9</td><td>"+ New" submission, visible to all users in real time</td><td><span class="pill planned">Planned</span></td></tr>
+            <tr><td class="id-cell">FR-10</td><td>Turn-by-turn directions to a result</td><td><span class="pill done">Done</span></td></tr>
+            <tr><td class="id-cell">FR-11</td><td>Report a correction, deep-linked into OSM's editor</td><td><span class="pill done">Done</span></td></tr>
+            <tr><td class="id-cell">FR-12</td><td>Share a link to one specific place</td><td><span class="pill done">Done</span></td></tr>
+            <tr><td class="id-cell">FR-13</td><td>Save places to a personal list (no account)</td><td><span class="pill done">Done</span></td></tr>
+            <tr><td class="id-cell">FR-14</td><td>Look up nearby vegetarian food / Dharamshalas from a result</td><td><span class="pill done">Done</span></td></tr>
+            <tr><td class="id-cell">FR-15</td><td>Install to home screen; app shell works without a network round-trip</td><td><span class="pill done">Done</span></td></tr>
+            <tr><td class="id-cell">FR-16</td><td>Search along a route between two or more places</td><td><span class="pill todo">Not designed</span></td></tr>
+            <tr><td class="id-cell">FR-17</td><td>A temple trust can mark their own listing "verified"</td><td><span class="pill todo">Not designed</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose" style="color: var(--muted); font-size: 0.86rem;">* UPI ID is currently a placeholder pending the maintainer's real ID. "Not designed" means the requirement needs a real decision (a routing approach; a verification mechanism) before it's built, not just implementation time.</p>
+
+      <h3>Non-functional requirements</h3>
+      <div class="prose">
+        <ul>
+          <li><strong>Cost:</strong> free-tier infrastructure only (GitHub Pages, public OSM APIs, Firebase free tier).</li>
+          <li><strong>No login required</strong> for any current or planned feature.</li>
+          <li><strong>Availability:</strong> best-effort — depends on third-party free services, no uptime SLA is realistic or promised.</li>
+          <li><strong>Data licensing:</strong> all map data stays compliant with OpenStreetMap's <a href="https://www.openstreetmap.org/copyright">ODbL license</a>, attributed in-app.</li>
+          <li><strong>Privacy:</strong> geolocation is used only client-side to run a search — never stored or sent to any server the maintainer controls.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="risks">
+      <h2>Risks</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Risk</th><th>Impact</th><th>Mitigation</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Community submissions have no review step</td>
+              <td>Spam or incorrect entries could appear immediately</td>
+              <td>Firestore rules restrict writes to well-formed data; entries marked "🆕 Community"; review step can be added later</td>
+            </tr>
+            <tr>
+              <td>Public free APIs rate-limit or degrade under load</td>
+              <td>Search fails or times out</td>
+              <td>Automatic single retry, smaller-radius guidance already implemented</td>
+            </tr>
+            <tr>
+              <td>Placeholder UPI ID isn't real yet</td>
+              <td>Donations silently fail</td>
+              <td>Tracked as an open action item for the maintainer</td>
+            </tr>
+            <tr>
+              <td>No formal data-quality control</td>
+              <td>Users may see outdated or incorrect info</td>
+              <td>Correctable upstream in OpenStreetMap by any contributor</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout"><strong>Note —</strong> the community-submission feature is scoped to ship <em>without</em> a moderation queue; this is a deliberate scope choice for launch, not an oversight, and is called out here so it's revisited if abuse becomes a real problem.</div>
+    </section>
+
+    <section id="roadmap">
+      <h2>Roadmap</h2>
+      <ol class="roadmap">
+        <li class="done">
+          <div class="r-title">Core search + category filters</div>
+          <div class="r-desc">Place/geolocation search, category filtering, denomination badges, map + list view.</div>
+        </li>
+        <li class="done">
+          <div class="r-title">Donation button</div>
+          <div class="r-desc">UPI link in the footer — pending the maintainer's real UPI ID.</div>
+        </li>
+        <li class="done">
+          <div class="r-title">Directions, share links, saved places, nearby amenities, PWA install</div>
+          <div class="r-desc">Six self-contained features needing no new infrastructure.</div>
+        </li>
+        <li class="current">
+          <div class="r-title">Community submissions</div>
+          <div class="r-desc">"+ New" button backed by Firebase Firestore, in progress.</div>
+        </li>
+        <li>
+          <div class="r-title">Multi-stop / route search <span class="pill todo" style="margin-left: 0.4em;">Not designed</span></div>
+          <div class="r-desc">Needs a routing/geometry approach decided first.</div>
+        </li>
+        <li>
+          <div class="r-title">"Verified by trust" badges <span class="pill todo" style="margin-left: 0.4em;">Not designed</span></div>
+          <div class="r-desc">Needs a real verification mechanism first; could become a legitimate paid-verification model instead of ads.</div>
+        </li>
+        <li>
+          <div class="r-title">Moderation / review queue <span class="pill planned" style="margin-left: 0.4em;">Unscoped</span></div>
+          <div class="r-desc">If submission quality becomes an issue.</div>
+        </li>
+        <li>
+          <div class="r-title">Route corrections back to OpenStreetMap <span class="pill planned" style="margin-left: 0.4em;">Unscoped</span></div>
+          <div class="r-desc">So the wider map ecosystem benefits, not just this app.</div>
+        </li>
+      </ol>
+    </section>
+
+    <section id="stack">
+      <p class="eyebrow">Architecture</p>
+      <h2>Tech stack</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Layer</th><th>Choice</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>Structure</td><td class="mono">index.html</td><td>No framework needed for a single-screen app</td></tr>
+            <tr><td>Styling</td><td class="mono">style.css</td><td>Plain CSS with custom properties; no build step</td></tr>
+            <tr><td>App logic</td><td class="mono">app.js</td><td>Vanilla JS, no bundler — "clone and open in a browser" simplicity</td></tr>
+            <tr><td>Map rendering</td><td>Leaflet.js 1.9.4 (CDN)</td><td>Lightweight, no API key, works with OSM tiles out of the box</td></tr>
+            <tr><td>Map tiles</td><td>OpenStreetMap tile servers</td><td>Free, no key required</td></tr>
+            <tr><td>Geocoding</td><td>Nominatim</td><td>Free, no key, matches the OSM-first data philosophy</td></tr>
+            <tr><td>Place data</td><td>Overpass API</td><td>Free, tag-queryable, no key</td></tr>
+            <tr><td>Saved places</td><td class="mono">localStorage</td><td>No account/backend needed for a personal favorites list</td></tr>
+            <tr><td>Shareable links</td><td>URL query params</td><td>The link itself carries enough data to render instantly — no lookup round-trip</td></tr>
+            <tr><td>Installability</td><td class="mono">manifest.json + sw.js</td><td>Standard PWA install/offline-shell mechanism</td></tr>
+            <tr><td>Submissions <em>(planned)</em></td><td>Firebase Firestore</td><td>Generous free tier; browser SDK needs no server</td></tr>
+            <tr><td>Hosting</td><td>GitHub Pages</td><td>Free static hosting, deploys from <code>main</code></td></tr>
+            <tr><td>CI/CD</td><td>GitHub's Pages workflow</td><td>Runs automatically on push; no custom pipeline authored</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose" style="color: var(--muted); font-size: 0.9rem;">Nothing in this stack requires a paid tier at the project's current scale.</p>
+    </section>
+
+    <section id="diagram">
+      <h2>System diagram</h2>
+      <div class="diagram">
+        <div class="diagram-row">
+          <div class="dbox browser"><span class="label">Visitor's browser</span><span class="sub">index.html · app.js · style.css</span></div>
+        </div>
+        <div class="arrow-row"><span class="arrow">↓ direct API calls, no origin server ↓</span></div>
+        <div class="diagram-row">
+          <div class="dbox"><span class="label">Nominatim</span><span class="sub">place name → coordinates</span></div>
+          <div class="dbox"><span class="label">Overpass API</span><span class="sub">place / POI queries</span></div>
+          <div class="dbox planned"><span class="label">Firebase Firestore</span><span class="sub">planned · community submissions</span></div>
+        </div>
+        <div class="arrow-row"><span class="arrow">↓</span></div>
+        <div class="diagram-row">
+          <div class="dbox" style="max-width: 320px;"><span class="label">OpenStreetMap dataset</span><span class="sub">community-maintained</span></div>
+        </div>
+      </div>
+      <p class="diagram-caption">Hosting: GitHub Pages serves the static files. Deployment: a push to <code>main</code> triggers GitHub's Pages workflow automatically.</p>
+    </section>
+
+    <section id="decisions">
+      <h2>Key design decisions</h2>
+      <div class="card-grid">
+        <div class="card">
+          <h4>Case-sensitive regex, not <code>,i</code></h4>
+          <p>Overpass's case-insensitive flag was dramatically slower and timed out at larger radii. Both capitalizations are spelled out in a plain alternation instead.</p>
+        </div>
+        <div class="card">
+          <h4>Per-category queries, not one union</h4>
+          <p>An early version combined all categories into one Overpass query with many union branches and timed out under load. Each category now runs as its own smaller query, with graceful degradation.</p>
+        </div>
+        <div class="card">
+          <h4>No API keys in the current stack</h4>
+          <p>Nominatim and Overpass are used key-free under fair-use policy — appropriate at this scale, worth revisiting if usage grows significantly.</p>
+        </div>
+        <div class="card">
+          <h4>Firebase config isn't a secret</h4>
+          <p>The <code>firebaseConfig</code> object will be visible client-side by design — real access control comes from Firestore security rules, not from hiding the config.</p>
+        </div>
+        <div class="card">
+          <h4>Share links carry their own data</h4>
+          <p>A shared place's name, category, denomination, and coordinates are encoded directly in the URL's query parameters, so opening a shared link renders instantly with no extra Overpass round-trip.</p>
+        </div>
+        <div class="card">
+          <h4>Favorites live in <code>localStorage</code>, not a database</h4>
+          <p>Saving a place needs no account or network call. The tradeoff: saved places don't sync across devices — an acceptable cost for a personal list at this scale.</p>
+        </div>
+        <div class="card">
+          <h4>Service worker caches same-origin only</h4>
+          <p>The <code>fetch</code> handler explicitly skips any request whose origin isn't the app's own, so map tiles, Nominatim, and Overpass always hit the network — caching those would risk stale search results.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="deployment">
+      <h2>Deployment &amp; scale limits</h2>
+      <div class="prose">
+        <ol>
+          <li>Developer commits and pushes to <code>main</code>.</li>
+          <li>GitHub's built-in Pages workflow triggers automatically.</li>
+          <li>Static files deploy to <a href="https://jainviyom.github.io/jain-temple-finder/">jainviyom.github.io/jain-temple-finder</a>.</li>
+          <li>Typical deploy time is under a minute; first-time deploys have occasionally needed a retry after a transient GitHub Pages error.</li>
+        </ol>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Service</th><th>Free-tier limit (approx.)</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Nominatim</td><td>~1 request/sec, fair use</td><td>Fine for interactive single-user searches</td></tr>
+            <tr><td>Overpass API</td><td>No hard published quota; shared, slows under load</td><td>Query design mitigates most timeout risk</td></tr>
+            <tr><td>GitHub Pages</td><td>100 GB bandwidth/mo, 1 GB site size</td><td>Nowhere close to being hit at current scale</td></tr>
+            <tr><td>Firebase Firestore <em>(planned)</em></td><td>50K reads/day, 20K writes/day, 1 GiB storage</td><td>Ample for a community-scale place list</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <span>Full source docs: <a href="https://github.com/jainviyom/jain-temple-finder/blob/main/docs/BRD.md">docs/BRD.md</a></span>
+  <span><a href="https://github.com/jainviyom/jain-temple-finder/blob/main/docs/ARCHITECTURE.md">docs/ARCHITECTURE.md</a></span>
+  <span><a href="https://github.com/jainviyom/jain-temple-finder/blob/main/README.md">README.md</a></span>
+</footer>
+
+<script>
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+    var sections = links.map(function (a) {
+      return document.getElementById(a.getAttribute('href').slice(1));
+    });
+    if (!('IntersectionObserver' in window)) return;
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var link = links[sections.indexOf(entry.target)];
+        if (!link) return;
+        if (entry.isIntersecting) {
+          links.forEach(function (l) { l.classList.remove('active'); });
+          link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+    sections.forEach(function (s) { if (s) observer.observe(s); });
+  })();
+</script>

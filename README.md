@@ -8,6 +8,8 @@ location — handy while traveling.
 For the full picture beyond this quick-start:
 - [docs/BRD.md](docs/BRD.md) — business requirements: goals, scope, requirements, roadmap, risks.
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — tech stack, system architecture, key design decisions.
+- [docs/documentation.html](https://jainviyom.github.io/jain-temple-finder/docs/documentation.html) —
+  the same content as one browsable page (source at [docs/documentation.html](docs/documentation.html)).
 
 ## Features
 - Search by typed place name or device geolocation.
